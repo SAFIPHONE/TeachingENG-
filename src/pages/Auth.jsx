@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../supabase';
-import { ChevronLeft, ShieldCheck, User, Globe, MessageSquare, Zap } from 'lucide-react';
+import { ChevronLeft, ShieldCheck, Zap } from 'lucide-react';
 
 const Auth = ({ language, toggleLanguage }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -16,7 +16,14 @@ const Auth = ({ language, toggleLanguage }) => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const t = {
         EN: {
@@ -42,7 +49,17 @@ const Auth = ({ language, toggleLanguage }) => {
             verificationInitiated: "VERIFICATION PROTOCOL INITIATED. CHECK EMAIL.",
             english: "ENGLISH",
             french: "FRENCH",
-            bilingual: "BILINGUAL"
+            bilingual: "BILINGUAL",
+            navDashboard: "STUDENT PORTAL",
+            navLogin: "SIGN IN",
+            heroSub: "We teach Chinese professional women spoken English directly through 1-on-1 WeChat sessions. Affordable, convenient, and highly effective. Very limited capacity.",
+            methodTitle: "WHY IT WORKS",
+            reflectionsTitle: "Student Success",
+            contactTitle: "SECURE YOUR SPOT",
+            footerNav: "NAVIGATION",
+            footerSupport: "CONTACT",
+            footerRights: "© 2026 TEACHINGENG / WECHAT ENGLISH",
+            footerLegal: "LEGAL"
         },
         ZH: {
             return: "返回主页",
@@ -67,7 +84,17 @@ const Auth = ({ language, toggleLanguage }) => {
             verificationInitiated: "验证程序已启动。请检查您的邮箱。",
             english: "英语课程",
             french: "法语课程",
-            bilingual: "双语精修"
+            bilingual: "双语精修",
+            navDashboard: "学员门户",
+            navLogin: "登录",
+            heroSub: "我们通过微信一对一直接教授中国职场女性英语口语。价格实惠，方便快捷，高效实用。名额非常有限。",
+            methodTitle: "高效原理",
+            reflectionsTitle: "学员成功案例",
+            contactTitle: "锁定您的名额",
+            footerNav: "网站导航",
+            footerSupport: "客户支持",
+            footerRights: "© 2026 教研科技 / 微信英语",
+            footerLegal: "法律条款"
         }
     };
 
@@ -101,12 +128,12 @@ const Auth = ({ language, toggleLanguage }) => {
                 if (authData?.user) {
                     const { error: profileError } = await supabase.from('profiles').upsert({
                         id: authData.user.id,
-                        email: authData.user.email, // Ensure email is saved for admin visibility
+                        email: authData.user.email,
                         full_name: fullName,
                         surname: surname,
                         language_to_learn: languageToLearn,
                         wechat_id: wechatId,
-                        approved_status: 'pending', // New field for approval workflow
+                        approved_status: 'pending',
                         updated_at: new Date()
                     });
                     
@@ -124,138 +151,177 @@ const Auth = ({ language, toggleLanguage }) => {
     };
 
     return (
-        <div className="royal-onyx-version" style={{ minHeight: '100vh', background: 'hsl(var(--onyx))', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px' }}>
-            <nav style={{ position: 'fixed', top: '60px', left: '60px', zIndex: 100 }}>
-                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '0.75rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em', textDecoration: 'none', transition: 'color 0.3s' }} onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.4)'}>
-                    <ChevronLeft size={16} /> {text.return.toUpperCase()}
-                </Link>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px', position: 'relative', overflow: 'hidden' }}>
+            {/* Animated Background Orbs */}
+            <div className="orb-container">
+                <div className="orb orb-1"></div>
+                <div className="orb orb-2"></div>
+                <div className="orb orb-3"></div>
+            </div>
+
+            {/* Neon Navigation */}
+            <nav className={`nav-neo ${scrolled ? 'scrolled' : ''}`}>
+                <div className="container nav-content">
+                    <Link to="/" className="logo-neo">Teaching<span>ENG</span></Link>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                        <Link to="/" className="font-heading" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.8rem', color: 'var(--text-muted)', textDecoration: 'none' }}>
+                            <ChevronLeft size={16} /> {text.return}
+                        </Link>
+                        <button onClick={toggleLanguage} className="font-heading" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', letterSpacing: '0.1em', cursor: 'pointer', transition: 'color 0.3s' }} onMouseEnter={e => e.target.style.color='white'} onMouseLeave={e => e.target.style.color='var(--text-muted)'}>
+                            {language === 'EN' ? 'ZH' : 'EN'}
+                        </button>
+                    </div>
+                </div>
             </nav>
 
-            <main className="animate-entrance" style={{ width: '100%', maxWidth: '650px' }}>
-                <div style={{ padding: '40px 60px', borderRadius: '4px', border: 'var(--border-subtle)', background: 'hsla(0,0%,100%,0.01)' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', borderRadius: '2px', border: 'var(--border-subtle)', background: 'hsla(0,0%,100%,0.02)' }}>
-                            <ShieldCheck size={28} style={{ color: 'hsl(var(--amber))', opacity: 0.8 }} />
+            <main className="scroll-reveal visible" style={{ width: '100%', maxWidth: '600px', marginTop: '100px', zIndex: 10 }}>
+                <div className="glass-panel" style={{ padding: '60px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+                        <div style={{ width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 25px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: 'var(--glass-border)' }}>
+                            <ShieldCheck size={30} color="var(--neon-purple)" style={{ filter: 'drop-shadow(0 0 10px rgba(189,0,255,0.5))' }} />
                         </div>
-                        <span className="accent" style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.4em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '15px' }}>
+                        <span className="font-heading" style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.3em', color: 'var(--neon-cyan)', display: 'block', marginBottom: '15px' }}>
                             {isLogin ? text.identity : text.portal}
                         </span>
-                        <h2 className="serif" style={{ fontSize: '3rem' }}>
-                            {isLogin ? text.access.split(' ')[0] : text.join.split(' ')[0]} <span className="liquid-gold-text serif-bold">{isLogin ? text.access.split(' ').slice(1).join(' ') : text.join.split(' ').slice(1).join(' ')}</span>
+                        <h2 style={{ fontSize: '2.5rem', marginBottom: '0' }}>
+                            {isLogin ? text.access.split(' ')[0] : text.join.split(' ')[0]} <span className="gradient-text">{isLogin ? text.access.split(' ').slice(1).join(' ') : text.join.split(' ').slice(1).join(' ')}</span>
                         </h2>
-                        <div className="header-divider" style={{ margin: '30px auto 0' }}></div>
                     </div>
 
-                    <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                    <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                         {!isLogin && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-                                <div className="form-group">
-                                    <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.givenName}</label>
-                                    <input type="text" className="input-onyx sans" placeholder="ALEX" value={fullName} onChange={(e) => setFullName(e.target.value)} required style={{ borderBottom: '1px solid hsla(0,0%,100%,0.1)', background: 'transparent' }} />
+                            <div className="grid-2" style={{ gap: '20px' }}>
+                                <div>
+                                    <label className="input-label">{text.givenName}</label>
+                                    <input type="text" className="input-glass" placeholder="ALEX" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
                                 </div>
-                                <div className="form-group">
-                                    <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.surname}</label>
-                                    <input type="text" className="input-onyx sans" placeholder="SMITH" value={surname} onChange={(e) => setSurname(e.target.value)} required style={{ borderBottom: '1px solid hsla(0,0%,100%,0.1)', background: 'transparent' }} />
+                                <div>
+                                    <label className="input-label">{text.surname}</label>
+                                    <input type="text" className="input-glass" placeholder="SMITH" value={surname} onChange={(e) => setSurname(e.target.value)} required />
                                 </div>
                             </div>
                         )}
 
                         {!isLogin && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-                                <div className="form-group">
-                                    <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.protocol}</label>
+                            <div className="grid-2" style={{ gap: '20px' }}>
+                                <div>
+                                    <label className="input-label">{text.protocol}</label>
                                     <select 
-                                        className="input-onyx sans" 
+                                        className="input-glass" 
                                         value={languageToLearn} 
                                         onChange={(e) => setLanguageToLearn(e.target.value)} 
                                         required 
-                                        style={{ 
-                                            borderBottom: '1px solid hsla(0,0%,100%,0.1)', 
-                                            background: 'hsl(var(--onyx-soft))',
-                                            color: 'white',
-                                            width: '100%',
-                                            cursor: 'pointer'
-                                        }}
                                     >
-                                        <option value="" style={{ background: 'hsl(var(--onyx-soft))', color: 'white' }}>{text.select}</option>
-                                        <option value="English" style={{ background: 'hsl(var(--onyx-soft))', color: 'white' }}>{text.english}</option>
-                                        <option value="French" style={{ background: 'hsl(var(--onyx-soft))', color: 'white' }}>{text.french}</option>
-                                        <option value="Both" style={{ background: 'hsl(var(--onyx-soft))', color: 'white' }}>{text.bilingual}</option>
+                                        <option value="">{text.select}</option>
+                                        <option value="English">{text.english}</option>
+                                        <option value="French">{text.french}</option>
+                                        <option value="Both">{text.bilingual}</option>
                                     </select>
                                 </div>
-                                <div className="form-group">
-                                    <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.wechat}</label>
-                                    <input type="text" className="input-onyx sans" placeholder="WECHAT_USER" value={wechatId} onChange={(e) => setWechatId(e.target.value)} required style={{ borderBottom: '1px solid hsla(0,0%,100%,0.1)', background: 'transparent' }} />
+                                <div>
+                                    <label className="input-label">{text.wechat}</label>
+                                    <input type="text" className="input-glass" placeholder="WECHAT_USER" value={wechatId} onChange={(e) => setWechatId(e.target.value)} required />
                                 </div>
                             </div>
                         )}
 
-                        <div className="form-group">
-                            <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.email}</label>
+                        <div>
+                            <label className="input-label">{text.email}</label>
                             <input
                                 type="email"
-                                className="input-onyx sans"
+                                className="input-glass"
                                 placeholder="name@vision.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                style={{ borderBottom: '1px solid hsla(0,0%,100%,0.1)', background: 'transparent' }}
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '12px' }}>{text.password}</label>
+                        <div>
+                            <label className="input-label">{text.password}</label>
                             <input
                                 type="password"
-                                className="input-onyx sans"
+                                className="input-glass"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                style={{ borderBottom: '1px solid hsla(0,0%,100%,0.1)', background: 'transparent' }}
                             />
                         </div>
 
                         {error && (
-                            <div className="accent" style={{ padding: '20px', color: '#ff4444', fontSize: '0.75rem', fontWeight: 800, border: '1px solid rgba(255,0,0,0.1)', textAlign: 'center', letterSpacing: '0.1em', background: 'hsla(0,100%,50%,0.02)' }}>
-                                <Zap size={14} style={{ marginRight: '10px' }} />
+                            <div className="font-heading" style={{ padding: '15px', color: '#ff4444', fontSize: '0.8rem', fontWeight: 600, border: '1px solid rgba(255,0,0,0.2)', textAlign: 'center', letterSpacing: '0.1em', background: 'rgba(255,0,0,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                <Zap size={16} />
                                 {error}
                             </div>
                         )}
 
-                        <button type="submit" disabled={loading} className="btn-power sans" style={{ width: '100%', justifyContent: 'center', marginTop: '20px', padding: '25px', fontSize: '0.9rem', fontWeight: 800 }}>
+                        <button type="submit" disabled={loading} className="btn-neon" style={{ width: '100%', marginTop: '10px', padding: '20px' }}>
                             {loading ? text.processing.toUpperCase() : (isLogin ? text.enter.toUpperCase() : text.init.toUpperCase())}
                         </button>
                     </form>
 
                     <div style={{ marginTop: '40px', textAlign: 'center' }}>
-                        <p className="accent" style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', marginBottom: '15px', fontWeight: 600, letterSpacing: '0.1em' }}>
+                        <p className="font-heading" style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', marginBottom: '15px', letterSpacing: '0.1em' }}>
                             {isLogin ? text.newSubject : text.alreadyVerified}
                         </p>
                         <button 
                             onClick={() => setIsLogin(!isLogin)} 
-                            className="serif" 
+                            className="font-heading" 
                             style={{ 
                                 fontSize: '0.9rem', 
                                 border: 'none', 
                                 background: 'transparent', 
                                 cursor: 'pointer', 
-                                color: 'hsl(var(--amber))',
+                                color: 'var(--neon-purple)',
                                 letterSpacing: '0.1em',
                                 textTransform: 'uppercase',
-                                fontWeight: 600,
-                                borderBottom: '1px solid hsla(var(--amber) / 0.2)', 
-                                padding: '0 0 5px',
-                                transition: 'var(--transition-power)'
+                                fontWeight: 700,
+                                transition: 'var(--transition-snap)'
                             }}
-                            onMouseEnter={e => e.target.style.borderBottomColor = 'hsl(var(--amber))'}
-                            onMouseLeave={e => e.target.style.borderBottomColor = 'hsla(var(--amber) / 0.2)'}
+                            onMouseEnter={e => e.target.style.color = 'var(--neon-cyan)'}
+                            onMouseLeave={e => e.target.style.color = 'var(--neon-purple)'}
                         >
                             {isLogin ? text.createProfile : text.signIn}
                         </button>
                     </div>
                 </div>
             </main>
+
+            {/* Neon Footer */}
+            <footer style={{ width: '100%', padding: '60px 0 30px', borderTop: 'var(--glass-border)', marginTop: '80px', position: 'relative', overflow: 'hidden', zIndex: 10 }}>
+                <div style={{ position: 'absolute', bottom: '-50%', left: '50%', transform: 'translateX(-50%)', width: '60vw', height: '60vw', background: 'var(--neon-blue)', filter: 'blur(150px)', opacity: 0.1, zIndex: -1 }}></div>
+                <div className="container grid-3" style={{ gap: '40px' }}>
+                    <div>
+                        <div className="logo-neo" style={{ fontSize: '1.5rem', marginBottom: '20px' }}>Teaching<span>ENG</span></div>
+                        <p style={{ fontSize: '0.9rem', maxWidth: '300px', lineHeight: 2 }}>
+                            {text.heroSub.split('.')[0]}.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 className="font-heading" style={{ fontSize: '0.8rem', letterSpacing: '0.3em', marginBottom: '25px', color: 'var(--neon-purple)', textTransform: 'uppercase' }}>{text.footerNav}</h4>
+                        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <li><Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.3s' }} onMouseEnter={e => e.target.style.color='var(--neon-cyan)'} onMouseLeave={e => e.target.style.color='var(--text-muted)'}>{text.methodTitle}</Link></li>
+                            <li><Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.3s' }} onMouseEnter={e => e.target.style.color='var(--neon-cyan)'} onMouseLeave={e => e.target.style.color='var(--text-muted)'}>{text.reflectionsTitle}</Link></li>
+                            <li><Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.3s' }} onMouseEnter={e => e.target.style.color='var(--neon-cyan)'} onMouseLeave={e => e.target.style.color='var(--text-muted)'}>{text.contactTitle}</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-heading" style={{ fontSize: '0.8rem', letterSpacing: '0.3em', marginBottom: '25px', color: 'var(--neon-cyan)', textTransform: 'uppercase' }}>{text.footerSupport}</h4>
+                        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <li style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>TeachingENG.com@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="container" style={{ marginTop: '50px', paddingTop: '30px', borderTop: 'var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <p className="font-heading" style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>{text.footerRights}</p>
+                    <div className="font-heading" style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>{text.footerLegal}</div>
+                </div>
+            </footer>
         </div>
     );
 };

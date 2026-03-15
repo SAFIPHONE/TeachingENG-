@@ -1,38 +1,38 @@
 import React from 'react';
+import { ShieldAlert } from 'lucide-react';
 
 const ContactForm = ({ text, contactForm, handleFormChange, handleContactSubmit, isSubmitting, submitStatus, sectionsRef }) => {
     return (
-        <section id="contact" ref={(el) => (sectionsRef.current[2] = el)} className="scroll-reveal" style={{ padding: '60px 0', borderTop: 'var(--border-subtle)' }}>
-            <div className="container" style={{ maxWidth: '900px' }}>
+        <section id="contact" ref={(el) => (sectionsRef.current[2] = el)} className="scroll-reveal" style={{ padding: '60px 0' }}>
+            <div className="container" style={{ maxWidth: '800px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                    <span className="section-label accent" style={{ opacity: 0.6 }}>SECURE CHANNEL</span>
-                    <h2 className="serif">{text.contactTitle.split(' ')[0]} <span className="liquid-gold-text serif-bold">{text.contactTitle.split(' ').slice(1).join(' ')}</span></h2>
-                    <div className="header-divider" style={{ margin: '30px auto' }}></div>
+                    <span className="font-heading" style={{ color: 'var(--neon-purple)', fontSize: '0.8rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '15px', display: 'block' }}>
+                        SECURE CHANNEL
+                    </span>
+                    <h2>
+                        {text.contactTitle.split(' ')[0]} <span className="gradient-text">{text.contactTitle.split(' ').slice(1).join(' ')}</span>
+                    </h2>
                 </div>
                 
-                <form onSubmit={handleContactSubmit} className="contact-form" style={{ padding: '40px', borderRadius: '4px', border: 'var(--border-subtle)', background: 'hsla(0,0%,100%,0.01)' }}>
-                    <div className="form-row" style={{ gap: '40px' }}>
-                        <div className="form-group">
-                            <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '15px' }}>{text.contactName}</label>
+                <form onSubmit={handleContactSubmit} className="glass-panel" style={{ padding: '60px' }}>
+                    <div className="grid-2" style={{ gap: '30px', marginBottom: '30px' }}>
+                        <div>
+                            <label className="input-label">{text.contactName}</label>
                             <input 
                                 type="text" 
                                 name="name" 
-                                placeholder="IDENTIFIER" 
-                                className="input-onyx sans" 
-                                style={{ background: 'transparent', borderBottom: '1px solid hsla(0,0%,100%,0.1)', padding: '15px 0' }}
+                                className="input-glass"
                                 value={contactForm.name} 
                                 onChange={handleFormChange} 
                                 required 
                             />
                         </div>
-                        <div className="form-group">
-                            <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '15px' }}>{text.contactEmail}</label>
+                        <div>
+                            <label className="input-label">{text.contactEmail}</label>
                             <input 
                                 type="email" 
                                 name="email" 
-                                placeholder="ENCRYPTION EMAIL" 
-                                className="input-onyx sans" 
-                                style={{ background: 'transparent', borderBottom: '1px solid hsla(0,0%,100%,0.1)', padding: '15px 0' }}
+                                className="input-glass"
                                 value={contactForm.email} 
                                 onChange={handleFormChange} 
                                 required 
@@ -40,26 +40,26 @@ const ContactForm = ({ text, contactForm, handleFormChange, handleContactSubmit,
                         </div>
                     </div>
                     
-                    <div className="form-group full-width" style={{ marginTop: '40px' }}>
-                        <label className="accent" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'hsl(var(--text-muted))', display: 'block', marginBottom: '15px' }}>{text.contactMessage}</label>
+                    <div style={{ marginBottom: '40px' }}>
+                        <label className="input-label">{text.contactMessage}</label>
                         <textarea 
                             name="message" 
-                            placeholder="PROTOCOL MESSAGE" 
-                            className="input-onyx sans" 
-                            style={{ minHeight: '150px', background: 'transparent', borderBottom: '1px solid hsla(0,0%,100%,0.1)', padding: '15px 0' }} 
+                            className="input-glass"
+                            style={{ minHeight: '120px', resize: 'vertical' }}
                             value={contactForm.message} 
                             onChange={handleFormChange} 
                             required 
                         />
                     </div>
                     
-                    <div style={{ marginTop: '60px', textAlign: 'center' }}>
-                        <button type="submit" className="btn-power sans" disabled={isSubmitting} style={{ fontWeight: 800, minWidth: '320px', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <button type="submit" className="btn-neon" disabled={isSubmitting} style={{ minWidth: '250px' }}>
                             {isSubmitting ? text.contactProcessing.toUpperCase() : text.contactCTA.toUpperCase()}
                         </button>
+                        
                         {submitStatus && (
-                            <div className="accent" style={{ marginTop: '30px', fontSize: '0.75rem', letterSpacing: '0.1em', color: submitStatus.includes('SUCCESS') ? 'hsl(var(--amber))' : '#ff4444', opacity: 0.8 }}>
-                                <Zap size={14} style={{ marginRight: '10px' }} />
+                            <div className="font-heading" style={{ marginTop: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '0.8rem', letterSpacing: '0.1em', color: submitStatus.includes('SUCCESS') ? 'var(--neon-cyan)' : '#ff4444' }}>
+                                <ShieldAlert size={16} />
                                 {submitStatus === 'AUTHENTICATED. WE WILL REACH OUT.' ? text.contactStatusAuth : text.contactStatusError}
                             </div>
                         )}

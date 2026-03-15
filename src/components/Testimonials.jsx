@@ -15,68 +15,69 @@ const Testimonials = ({ text, testimonials, sectionsRef }) => {
     return (
         <section id="testimonials" ref={(el) => (sectionsRef.current[4] = el)} className="scroll-reveal" style={{ padding: '60px 0' }}>
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                    <span className="section-label accent" style={{ opacity: 0.6 }}>{text.reflectionsFeedback}</span>
-                    <h2 className="serif">{text.reflectionsTitle.split(' ')[0]} <span className="liquid-gold-text serif-bold">{text.reflectionsTitle.split(' ').slice(1).join(' ')}</span></h2>
-                    <div className="header-divider" style={{ margin: '30px auto' }}></div>
+                <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+                    <span className="font-heading" style={{ color: 'var(--neon-blue)', fontSize: '0.8rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '15px', display: 'block' }}>
+                        {text.reflectionsFeedback}
+                    </span>
+                    <h2>
+                        {text.reflectionsTitle.split(' ')[0]} <span className="gradient-text">{text.reflectionsTitle.split(' ').slice(1).join(' ')}</span>
+                    </h2>
                 </div>
 
-                <div className={`testimonials-grid ${testimonials.length === 0 ? 'empty' : ''}`}>
+                <div className="grid-2" style={{ gap: '40px' }}>
                     {testimonials.length > 0 ? testimonials.slice(0, visibleCount).map((t, idx) => (
-                        <div key={idx} className="testimonial-card">
-                            <div className="rating-stars" style={{ marginBottom: '30px', display: 'flex', gap: '8px' }}>
+                        <div key={idx} className="glass-panel" style={{ padding: '50px', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ marginBottom: '30px', display: 'flex', gap: '8px' }}>
                                 {[...Array(t.rating || 5)].map((_, i) => (
-                                    <Star key={i} size={14} fill="hsl(var(--amber))" color="hsl(var(--amber))" style={{ opacity: 0.6 }} />
+                                    <Star key={i} size={16} fill="var(--neon-cyan)" color="var(--neon-cyan)" style={{ filter: 'drop-shadow(0 0 5px rgba(0, 242, 254, 0.5))' }} />
                                 ))}
                             </div>
 
-                            <p className="testimonial-content">
+                            <p style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '30px', flex: 1, fontStyle: 'italic' }}>
                                 "{t.content}"
                             </p>
 
                             {t.video_url && (
-                                <div className="testimonial-video-container">
+                                <div style={{ marginBottom: '30px', borderRadius: '12px', overflow: 'hidden', border: 'var(--glass-border)' }}>
                                     <video controls style={{ width: '100%', display: 'block' }}>
                                         <source src={t.video_url} type="video/mp4" />
                                         Your browser does not support the video tag.
                                     </video>
-                                    <div className="video-overlay"></div>
                                 </div>
                             )}
 
-                            <div className="testimonial-author" style={{ marginTop: 'auto', paddingTop: '40px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-                                <div className="author-avatar" style={{ border: 'var(--border-accent)', width: '44px', height: '44px', overflow: 'hidden', borderRadius: '4px', background: 'hsla(0,0%,100%,0.05)' }}>
+                            <div style={{ marginTop: 'auto', paddingTop: '30px', borderTop: 'var(--glass-border)', display: 'flex', alignItems: 'center', gap: '20px' }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--neon-purple)', background: 'rgba(255,255,255,0.05)' }}>
                                     {t.profiles?.avatar_url ? (
                                         <img src={t.profiles.avatar_url} alt={t.profiles.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.2 }}>
-                                            <User size={18} />
+                                            <User size={20} />
                                         </div>
                                     )}
                                 </div>
-                                <div className="author-info">
-                                    <p className="author-name accent" style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '0.2em', color: 'hsl(var(--amber))' }}>
+                                <div>
+                                    <p className="font-heading" style={{ fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.1em', color: 'var(--text-main)', marginBottom: '5px' }}>
                                         {t.profiles?.full_name?.toUpperCase()} {t.profiles?.surname?.substring(0, 1)?.toUpperCase()}.
                                     </p>
-                                    <p className="author-country accent" style={{ fontSize: '0.65rem', color: 'hsl(var(--text-muted))', letterSpacing: '0.1em' }}>
+                                    <p className="font-heading" style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>
                                         {t.profiles?.country?.toUpperCase() || 'ELITE SUBJECT'}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     )) : (
-                        <div className="awaiting-transmissions" style={{ padding: '120px', textAlign: 'center', border: 'var(--border-subtle)', background: 'hsla(0,0%,100%,0.01)', gridColumn: 'span 2' }}>
-                            <span className="accent" style={{ letterSpacing: '0.5em', fontSize: '0.75rem', opacity: 0.3 }}>AWAITING INCOMING TRANSMISSIONS...</span>
+                        <div className="glass-panel" style={{ padding: '80px', textAlign: 'center', gridColumn: '1 / -1' }}>
+                            <span className="font-heading" style={{ letterSpacing: '0.5em', fontSize: '0.8rem', opacity: 0.5 }}>AWAITING INCOMING TRANSMISSIONS...</span>
                         </div>
                     )}
                 </div>
 
                 {testimonials.length > 2 && (
-                    <div style={{ marginTop: '80px', textAlign: 'center' }}>
+                    <div style={{ marginTop: '60px', textAlign: 'center' }}>
                         <button 
                             onClick={() => setVisibleCount(showMore ? testimonials.length : 2)}
-                            className="serif liquid-gold-text"
-                            style={{ background: 'transparent', border: 'none', borderBottom: '1px solid hsla(var(--amber) / 0.3)', cursor: 'pointer', fontSize: '1.4rem', padding: '0 15px 5px' }}
+                            className="btn-glass"
                         >
                             {showMore ? extra.more : extra.less}
                         </button>

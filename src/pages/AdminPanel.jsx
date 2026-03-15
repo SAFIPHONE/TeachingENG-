@@ -37,9 +37,9 @@ const AdminPanel = ({ content, refreshData, language }) => {
         biometrics: "COACH BIOGRAPHY",
         globalBio: "PROFESSIONAL BIO",
         rateProtocol: "SERVICE RATES",
-        status: "AVAILABILITY",
-        busy: "BOOKED",
-        active: "AVAILABLE",
+        status: "REGISTRATION STATUS",
+        busy: "SYSTEM LOCKED",
+        active: "REGISTRATION OPEN",
         subjectReflections: "Client Feedback",
         noReflections: "NO TESTIMONIALS FOUND",
         subject: "USER",
@@ -87,9 +87,9 @@ const AdminPanel = ({ content, refreshData, language }) => {
         biometrics: "专业资历",
         globalBio: "职业简介",
         rateProtocol: "服务资费",
-        status: "课时状态",
-        busy: "约满",
-        active: "可约",
+        status: "报名状态",
+        busy: "系统已锁定",
+        active: "报名开放中",
         subjectReflections: "学员反馈",
         noReflections: "暂无评价",
         subject: "用户",
@@ -130,9 +130,9 @@ const AdminPanel = ({ content, refreshData, language }) => {
   }, [content]);
 
   useEffect(() => {
-    if (activeTab === 'users') fetchProfiles();
-    else if (activeTab === 'leads') fetchLeads();
-    else if (activeTab === 'testimonials') fetchTestimonials();
+    if (activeTab === 'registry') fetchProfiles();
+    else if (activeTab === 'inquiry') fetchLeads();
+    else if (activeTab === 'reflections') fetchTestimonials();
   }, [activeTab]);
 
   const fetchProfiles = async () => {
@@ -250,10 +250,16 @@ const AdminPanel = ({ content, refreshData, language }) => {
   };
 
   return (
-    <div className="royal-onyx-version" style={{ display: 'flex', minHeight: '100vh', background: 'hsl(var(--onyx))' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* Background Orbs */}
+      <div className="orb-container">
+          <div className="orb orb-1"></div>
+          <div className="orb orb-2"></div>
+      </div>
+
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} text={text} />
 
-      <main style={{ flex: 1, padding: '60px 80px', position: 'relative' }}>
+      <main style={{ flex: 1, padding: '60px 80px', position: 'relative', zIndex: 10 }}>
           <DashboardHeader 
             title={activeTab === 'site' ? text.commandCenter : text[`nav${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`]} 
             operations={text.operations} 
@@ -272,7 +278,7 @@ const AdminPanel = ({ content, refreshData, language }) => {
             />
           )}
           
-          {activeTab === 'users' && (
+          {activeTab === 'registry' && (
             <Registry 
               profiles={profiles} 
               handleUpdateUserStatus={handleUpdateUserStatus} 
@@ -281,7 +287,7 @@ const AdminPanel = ({ content, refreshData, language }) => {
             />
           )}
 
-          {activeTab === 'leads' && (
+          {activeTab === 'inquiry' && (
             <InquiryStream 
               leads={leads} 
               handleDeleteLead={handleDeleteLead} 
@@ -289,7 +295,7 @@ const AdminPanel = ({ content, refreshData, language }) => {
             />
           )}
 
-          {activeTab === 'testimonials' && (
+          {activeTab === 'reflections' && (
             <ReflectionsManager 
               testimonials={testimonials} 
               handleApproveTestimonial={handleApproveTestimonial} 

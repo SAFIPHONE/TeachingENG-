@@ -3,27 +3,27 @@ import { User, Camera, Plus } from 'lucide-react';
 
 const SiteControl = ({ formData, setFormData, handleCoachAvatarUpload, text }) => {
   return (
-    <div className="animate-entrance" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-      <div className="glass-obsidian" style={{ padding: '40px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.03)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginBottom: '40px' }}>
-          <div style={{ position: 'relative', width: '100px', height: '100px', background: 'hsla(0,0%,100%,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+    <div className="scroll-reveal visible" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+      <div className="glass-panel" style={{ padding: '50px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '40px' }}>
+          <div style={{ position: 'relative', width: '120px', height: '120px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: 'var(--glass-border)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {formData.avatar_url ? (
               <img src={formData.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Coach" />
             ) : (
-              <User size={30} style={{ opacity: 0.1, margin: '35px' }} />
+              <User size={40} style={{ opacity: 0.5, color: 'var(--neon-cyan)' }} />
             )}
             <label style={{ 
-              position: 'absolute', bottom: '-5px', right: '-5px', width: '28px', height: '28px', 
-              background: 'hsl(var(--amber))', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+              position: 'absolute', bottom: '0', right: '0', width: '36px', height: '36px', 
+              background: 'var(--neon-purple)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              borderRadius: '50%', boxShadow: '0 0 10px rgba(189,0,255,0.5)'
             }}>
-              <Camera size={12} color="black" /> 
+              <Camera size={16} /> 
               <input type="file" hidden accept="image/*" onChange={handleCoachAvatarUpload} />
             </label>
           </div>
           <div>
-            <h4 className="serif" style={{ fontSize: '1.4rem', color: 'white' }}>{text.coachIdentity}</h4>
-            <p className="accent" style={{ fontSize: '0.65rem', color: 'hsl(var(--amber))', fontWeight: 700, letterSpacing: '0.2em' }}>
+            <h4 style={{ fontSize: '1.6rem', color: 'var(--text-main)', marginBottom: '5px' }}>{text.coachIdentity}</h4>
+            <p className="font-heading" style={{ fontSize: '0.8rem', color: 'var(--neon-cyan)', fontWeight: 700, letterSpacing: '0.2em' }}>
               {text.biometrics}
             </p>
           </div>
@@ -31,41 +31,40 @@ const SiteControl = ({ formData, setFormData, handleCoachAvatarUpload, text }) =
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
           <div>
-            <label className="accent" style={{ fontSize: '0.6rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: '10px' }}>
+            <label className="input-label">
               {text.globalBio}
             </label>
             <textarea 
-              className="input-onyx sans" 
+              className="input-glass" 
               value={formData.bio} 
               onChange={e => setFormData({...formData, bio: e.target.value})} 
-              style={{ minHeight: '120px', width: '100%', padding: '15px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px', color: 'white', lineHeight: '1.6', fontSize: '0.85rem' }} 
+              style={{ minHeight: '150px', resize: 'vertical' }} 
             />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <div className="grid-2" style={{ gap: '20px' }}>
             <div>
-              <label className="accent" style={{ fontSize: '0.6rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: '10px' }}>
+              <label className="input-label">
                 {text.rateProtocol}
               </label>
               <input 
-                className="input-onyx sans" 
+                className="input-glass" 
                 value={formData.rates} 
                 onChange={e => setFormData({...formData, rates: e.target.value})} 
-                style={{ width: '100%', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px', color: 'white', fontSize: '0.85rem' }}
               />
             </div>
             <div>
-              <label className="accent" style={{ fontSize: '0.6rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: '10px' }}>
+              <label className="input-label">
                 {text.status}
               </label>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 0' }}>
-                <span className="sans" style={{ fontWeight: 700, fontSize: '0.75rem', color: formData.isBooked ? '#ff4444' : 'hsl(var(--amber))', letterSpacing: '0.1em' }}>
+                <span className="font-heading" style={{ fontWeight: 700, fontSize: '0.85rem', color: formData.isBooked ? '#ff4444' : 'var(--neon-cyan)', letterSpacing: '0.1em' }}>
                   {formData.isBooked ? text.busy : text.active}
                 </span>
                 <input 
                   type="checkbox" 
                   checked={formData.isBooked} 
                   onChange={e => setFormData({...formData, isBooked: e.target.checked})} 
-                  style={{ accentColor: 'hsl(var(--amber))', width: '16px', height: '16px', cursor: 'pointer' }} 
+                  style={{ accentColor: 'var(--neon-cyan)', width: '20px', height: '20px', cursor: 'pointer' }} 
                 />
               </div>
             </div>
@@ -73,27 +72,27 @@ const SiteControl = ({ formData, setFormData, handleCoachAvatarUpload, text }) =
         </div>
       </div>
 
-      <div className="glass-obsidian" style={{ padding: '40px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.03)' }}>
+      <div className="glass-panel" style={{ padding: '50px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-          <h4 className="serif" style={{ fontSize: '1.4rem', color: 'white' }}>{text.subjectReflections}</h4>
-          <button style={{ color: 'hsl(var(--amber))', border: 'none', background: 'transparent', cursor: 'pointer' }}>
-            <Plus size={24} />
+          <h4 style={{ fontSize: '1.6rem', margin: 0 }}>{text.subjectReflections}</h4>
+          <button style={{ color: 'var(--neon-cyan)', border: 'none', background: 'rgba(0, 242, 254, 0.1)', cursor: 'pointer', padding: '10px', borderRadius: '50%' }}>
+            <Plus size={20} />
           </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {formData.testimonials && formData.testimonials.length > 0 ? (
             formData.testimonials.slice(0, 3).map(test => (
-              <div key={test.id} style={{ padding: '20px', borderRadius: '2px', border: '1px solid rgba(255,255,255,0.03)', background: 'rgba(255,255,255,0.01)' }}>
-                <p className="accent" style={{ fontWeight: 700, fontSize: '0.65rem', color: 'hsl(var(--amber))', marginBottom: '10px', letterSpacing: '0.1em' }}>
+              <div key={test.id} style={{ padding: '20px', borderRadius: '8px', border: 'var(--glass-border)', background: 'rgba(255,255,255,0.02)' }}>
+                <p className="font-heading" style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--neon-cyan)', marginBottom: '10px', letterSpacing: '0.1em' }}>
                   { (test.profiles?.full_name || test.name || text.subject).toUpperCase() }
                 </p>
-                <p className="serif" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', fontStyle: 'italic', lineHeight: '1.4' }}>
+                <p style={{ fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', lineHeight: '1.6' }}>
                   "{test.content || test.text || '...'}"
                 </p>
               </div>
             ))
           ) : (
-            <p className="accent" style={{ fontSize: '0.7rem', opacity: 0.3, textAlign: 'center', letterSpacing: '0.3em' }}>
+            <p className="font-heading" style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', textAlign: 'center', letterSpacing: '0.2em', padding: '40px 0' }}>
               {text.noReflections.toUpperCase()}
             </p>
           )}
